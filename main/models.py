@@ -28,6 +28,7 @@ class BookEntry(models.Model):
     author = models.CharField(max_length=50)
     time_added = models.DateTimeField(auto_now_add=True)
     review_list = models.JSONField(default=dict)
+    publisher = models.CharField(max_length=50)
 
     @property
     def average_rating(self):
