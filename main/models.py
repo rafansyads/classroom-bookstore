@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MinLengthValidator, MaxLengthValidator, MaxValueValidator # can be changed to import * to import all validators if needed
+import re
 
 # Create your models here.
 class BookEntry(models.Model):
@@ -28,12 +29,22 @@ class BookEntry(models.Model):
     author = models.CharField(max_length=50)
     time_added = models.DateTimeField(auto_now_add=True)
     review_list = models.JSONField(default=dict)
+    publisher = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='books/', blank=True, null=True)
 
     @property
     def average_rating(self):
         if not self.review_list:
             return 0.0
         return sum(self.review_list.values()) / len(self.review_list)
+    
+    def image_url(self):
+        # Replace spaces with underscores and add the file extension
+        image_name = re.sub(r'\W+', '_', self.name) + '.jpeg'
+        return f'/books/{image_name}'
+    
+    def is_in_stock(self):
+        return self.quantity > 0
     
     def add_review(self, reviewer, rating):
         self.review_list[reviewer] = rating
