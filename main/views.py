@@ -1,28 +1,11 @@
-from django.shortcuts import render
-from .models import BookEntry
+from django.shortcuts import render, redirect
+from main.models import BookEntry
+from main.forms import BookEntryForm
+from django.http import HttpResponse
+from django.core import serializers
 
 # Create your views here.
 def show_main(request):
-    # context = {
-    #     'name' : 'Classroom of The Elite Year 2, Volume 2',
-    #     'price': 235000,
-    #     'description': 'Classroom of The Elite Year 2, Volume 1 is a light novel written by Syougo Kinugasa and illustrated by Shunsaku Tomose. This light novel is the sequel of Classroom of The Elite Year 1, Volume 1. The story continues with the main character, Kiyotaka Ayanokouji, and his friends in the second year of their high school life. The story is set in the Advanced Nurturing High School, where students are divided into four classes based on their academic performance. The story follows the students as they navigate the challenges of high school life and strive to achieve their goals. The light novel is filled with suspense, drama, and mystery, making it a must-read for fans of the genre.',
-    #     'quantity': 1,
-    #     'category': 'Light Novel / Manga',
-    #     'isbn_13': '9781638583370',
-    #     'isbn_10': '1638583377',
-    #     'published_date': '2022-08-30',
-    #     'pages' : 488,
-    #     'language': 'English',
-    #     'weight': 0.38,
-    #     'publisher' : 'Airship',
-    #     'rating_star': 0.0,
-    #     'rating_count': 0,
-    #     'author': 'Syougo Kinugasa',
-    #     'time_added': '2024-09-05 22:19:00',
-    #     'review_list': {},
-    # }
-
     context = [
         BookEntry(name='Classroom of the Elite Year 2, Volume 1', price=235000, description='Classroom of The Elite Year 2, Volume 1 is a light novel written by Syougo Kinugasa and illustrated by Shunsaku Tomose. This light novel is the sequel of Classroom of The Elite Year 1, Volume 1. The story continues with the main character, Kiyotaka Ayanokouji, and his friends in the second year of their high school life. The story is set in the Advanced Nurturing High School, where students are divided into four classes based on their academic performance. The story follows the students as they navigate the challenges of high school life and strive to achieve their goals. The light novel is filled with suspense, drama, and mystery, making it a must-read for fans of the genre.',
                   quantity=1, category='Light Novel / Manga', isbn_13='9781638581826', isbn_10='1638581827', published_date='2022-07-19', pages=480, language='English', weight=0.38, publisher='Airship', rating_star=0.0, rating_count=0, author='Syougo Kinugasa', time_added='2024-09-05 22:19:00', review_list={}, image=''),
@@ -41,8 +24,41 @@ def show_main(request):
         BookEntry(name='The 48 Laws of Power', price=230000, description='The 48 Laws of Power is a practical guide to understanding power dynamics and mastering the art of persuasion. Written by Robert Greene, the book explores the timeless principles of power and influence that have shaped history and continue to impact the world today. Drawing on historical examples and psychological insights, Greene offers a comprehensive framework for navigating the complexities of power in various contexts. Whether you are a leader, entrepreneur, or student of human nature, The 48 Laws of Power provides valuable lessons and strategies for achieving your goals and influencing others.',
                   quantity=1, category='Self-Help', isbn_13='9780140280197', isbn_10='0140280197', published_date='2000-09-01', pages=452, language='English', weight=0.45, publisher='Penguin Books', rating_star=0.0, rating_count=0, author='Robert Greene', time_added='2024-09-10 20:25:00', review_list={}, image=''),
     ]
+    
+    new_books = BookEntry.objects.all().order_by('-time_added')
+    context = list(new_books) + context
 
     for book in context:
         book.image = book.image_url()
 
     return render(request, "main.html", {'context': context})
+
+def add_book_entry_form(request):
+    form = BookEntryForm(request.POST or None, request.FILES or None)
+
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {'form': form}
+    return render(request, 'add_book.html', context)
+
+def show_xml(request):
+    books = BookEntry.objects.all()
+    data = serializers.serialize('xml', books)
+    return HttpResponse(data, content_type='application/xml')
+
+def show_json(request):
+    books = BookEntry.objects.all()
+    data = serializers.serialize('json', books)
+    return HttpResponse(data, content_type='application/json')
+
+def show_xml_by_id(request, id):
+    book = BookEntry.objects.filter(pk=id)
+    data = serializers.serialize('xml', book)
+    return HttpResponse(data, content_type='application/xml')
+
+def show_json_by_id(request, id):
+    book = BookEntry.objects.filter(pk=id)
+    data = serializers.serialize('json', book)
+    return HttpResponse(data, content_type='application/json')

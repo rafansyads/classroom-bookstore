@@ -1,9 +1,13 @@
+import uuid
+import os
+from django.conf import settings
 from django.db import models
 from django.core.validators import MinValueValidator, MinLengthValidator, MaxLengthValidator, MaxValueValidator # can be changed to import * to import all validators if needed
 import re
 
 # Create your models here.
 class BookEntry(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     price = models.IntegerField()
     description = models.TextField()
@@ -23,9 +27,10 @@ class BookEntry(models.Model):
     weight = models.DecimalField(max_digits=99999, decimal_places=2)
     rating_star = models.DecimalField(max_digits=2, 
                                       decimal_places=1,
-                                      validators=[MinValueValidator(0.0), MaxValueValidator(5.0)]
+                                      validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],
+                                      default=0.0
     )
-    rating_count = models.IntegerField(validators=[MinValueValidator(0)])
+    rating_count = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     author = models.CharField(max_length=50)
     time_added = models.DateTimeField(auto_now_add=True)
     review_list = models.JSONField(default=dict)
@@ -40,8 +45,16 @@ class BookEntry(models.Model):
     
     def image_url(self):
         # Replace spaces with underscores and add the file extension
-        image_name = re.sub(r'\W+', '_', self.name) + '.jpeg'
-        return f'/books/{image_name}'
+        image_name = re.sub(r'\W+', '_', self.name).lower()
+        extentions = ['jpg', 'jpeg', 'png']
+        media_dir = os.path.join(settings.MEDIA_ROOT, 'books')
+
+        # Check if the image exists with any of the extensions (jpg, jpeg, png)
+        for ext in extentions:
+            if os.path.exists(os.path.join(media_dir, image_name + '.' + ext)):
+                return f'/books/{image_name}.{ext}'
+            
+        return '/books/default.jpg'
     
     def is_in_stock(self):
         return self.quantity > 0

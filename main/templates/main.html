@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
+{% block content %}
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +20,7 @@
             <button class="category-button" onclick="filterSelection('Mystery / Thriller')">Mystery / Thriller</button>
             <button class="category-button" onclick="filterSelection('Self-Help')">Self-Help</button>
             <button class="category-button" onclick="filterSelection('Philosophy')">Philosophy</button>
+            <button class="category-button" onclick="filterSelection('Biography')">Biography</button>
             <button class="category-button" onclick="filterSelection('Junior-Kids')">Junior-Kids</button>
         </div>
 
@@ -25,14 +28,16 @@
 
         <div class="context">
             {% for book in context %}
-            <div class="book-cards">
+            <div class="book-cards" data="{{ book.category }}">
                 <div class="book-image">
                     <img src="{{ book.image.url }}" alt="{{ book.name }}">
                 </div>
                 <h2>{{ book.name }}</h2>
                 <div class="book-info">
                     <p id="price-tag"><strong>Price:</strong> Rp{{ book.price }},-</p>
-                    <p class="short-descr">{{ book.description | slice:":150" }}...</p>
+                    <p class="short-descr">{{ book.description | slice:":150" }}...
+                    <span class="full-descr" style="display: none;">{{ book.description }}</span>
+                    <a href="javascript:void(0);" class="show-more" onclick="toggleDescription(this)">Show More</a></p>
                     <p><strong>Category:</strong> {{ book.category }}</p>
                     <p><strong>Author:</strong> {{ book.author }}</p>
                     <p><strong>Published Date:</strong> {{ book.published_date }}</p>
@@ -58,71 +63,109 @@
                         <button class="remind-button">Remind Me</button>
                     {% endif %}
 
+                    <hr>
                 </div>
             </div>
-            <hr>
             {% empty %}
             <p>No books available</p>
             {% endfor %}
         </div>
-        <script>
-            function toggleAttributes(anchor) {
-                var moreAttributes = anchor.previousElementSibling;
-                if (moreAttributes.style.display === "none") {
-                    moreAttributes.style.display = "block";
-                    anchor.textContent = "Show Less";
-                } else {
-                    moreAttributes.style.display = "none";
-                    anchor.textContent = "Show More";
-                }
-            }
-            </script>
+        <div class="admin-menus">
+            <a href="{% url 'main:add_book' %}" id="admin-add-book-link">
+                <button id="admin-add-book-button">Add Book</button>
+            </a>
+        </div>
+        <hr>
     </div>
     
+    <script>
+        function toggleAttributes(anchor) {
+            var moreAttributes = anchor.previousElementSibling;
+            if (moreAttributes.style.display === "none") {
+                moreAttributes.style.display = "block";
+                anchor.textContent = "Show Less";
+            } else {
+                moreAttributes.style.display = "none";
+                anchor.textContent = "Show More";
+            }
+        }
 
+        function filterSelection(category) {
+            var books = document.getElementsByClassName("book-cards");
+            if (category === "all") {
+                for (var i = 0; i < books.length; i++) {
+                    books[i].style.display = "block";
+                }
+            } else {
+                for (var i = 0; i < books.length; i++) {
+                    if (books[i].getElementsByClassName("book-info")[0].getElementsByTagName("p")[2].textContent.split(": ")[1] === category) {
+                        books[i].style.display = "block";
+                    } else {
+                        books[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function toggleDescription(element) {
+            var shortDescr = element.previousElementSibling.previousElementSibling;
+            var fullDescr = element.previousElementSibling;
+            if (fullDescr.style.display === "none") {
+                fullDescr.style.display = "inline";
+                shortDescr.style.display = "none";
+                element.textContent = "Show Less";
+            } else {
+                fullDescr.style.display = "none";
+                shortDescr.style.display = "inline";
+                element.textContent = "Show More";
+            }
+        }
+    </script>
+    
     <!-- <h1>Classroom Bookstore</h1>
     <h5>Name: </h5>
     <p>{{ name }}<p>
-    <h5>Price: </h5>
-    <p>{{ price }}<p>
-    <h5>Description: </h5>
-    <p>{{ description }}<p>
-    <h5>Quantity:   </h5>
-    <p>{{ quantity }}<p>
-    <h5>Category: </h5>
-    <p>{{ category }}<p>
-    <h5>ISBN (13 digit): </h5>
-    <p>{{ isbn_13 }}</p>
-    <h5>ISBN (10 digit): </h5>
-    <p>{{ isbn_10 }}</p>
-    <h5>Published Date: </h5>
-    <p>{{ published_date }}</p>
-    <h5>Pages: </h5>
-    <p>{{ pages }}</p>
-    <h5>Language: </h5>
-    <p>{{ language }}</p>
-    <h5>Weight: </h5>
-    <p>{{ weight }}</p> -->
-    <p>{{ weight }}</p> -->
-    <!-- <h5>Dimensions: </h5>
-    <p>{{ dimensions }}</p> -->
-    <!-- <h5>Publisher: </h5>
-    <!-- <h5>Publisher: </h5>
-    <p>{{ publisher }}</p>
-    <h5>Rating: </h5>
-    <p>{{ rating_star }}</p>
-    <h5>Rating Count: </h5>
-    <p>{{ rating_count }}</p>
-    <h5>Author: </h5>
-    <p>{{ author }}</p> -->
-    <p>{{ author }}</p> -->
-    <!-- <h5>Image: </h5> -->
-    <!-- adding image and from the database later lmao wait -->
-     <!-- <h5>Time Added:</h5>
-    <p>{{ time_added }}</p> -->
-     <!-- <h5>Time Added:</h5>
-    <p>{{ time_added }}</p> -->
-
-</body>
-    
+        <h5>Price: </h5>
+        <p>{{ price }}<p>
+            <h5>Description: </h5>
+            <p>{{ description }}<p>
+                <h5>Quantity:   </h5>
+                <p>{{ quantity }}<p>
+                    <h5>Category: </h5>
+                    <p>{{ category }}<p>
+                        <h5>ISBN (13 digit): </h5>
+                        <p>{{ isbn_13 }}</p>
+                        <h5>ISBN (10 digit): </h5>
+                        <p>{{ isbn_10 }}</p>
+                        <h5>Published Date: </h5>
+                        <p>{{ published_date }}</p>
+                        <h5>Pages: </h5>
+                        <p>{{ pages }}</p>
+                        <h5>Language: </h5>
+                        <p>{{ language }}</p>
+                        <h5>Weight: </h5>
+                        <p>{{ weight }}</p> -->
+                        <!-- <p>{{ weight }}</p> -->
+                        <!-- <h5>Dimensions: </h5>
+                        <p>{{ dimensions }}</p> -->
+                        <!-- <h5>Publisher: </h5>
+                        <!-- <h5>Publisher: </h5>
+                        <p>{{ publisher }}</p>
+                        <h5>Rating: </h5>
+                        <p>{{ rating_star }}</p>
+                        <h5>Rating Count: </h5>
+                        <p>{{ rating_count }}</p>
+                        <h5>Author: </h5>
+                        <p>{{ author }}</p> -->
+                        <!-- <p>{{ author }}</p> -->
+                        <!-- <h5>Image: </h5> -->
+                        <!-- adding image and from the database later lmao wait -->
+                        <!-- <h5>Time Added:</h5>
+                        <p>{{ time_added }}</p> -->
+                        <!-- <h5>Time Added:</h5>
+                        <p>{{ time_added }}</p> -->
+                        
+</body>                    
+{% endblock content %}
 </html>
+                    
