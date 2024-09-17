@@ -35,8 +35,7 @@
                 <h2>{{ book.name }}</h2>
                 <div class="book-info">
                     <p id="price-tag"><strong>Price:</strong> Rp{{ book.price }},-</p>
-                    <p class="short-descr">{{ book.description | slice:":150" }}...
-                    <span class="full-descr" style="display: none;">{{ book.description }}</span>
+                    <p class="short-descr">{{ book.description | slice:":150" }}<span class="full-descr" style="display: none;">{{ book.description | slice:"150:"}}</span>
                     <a href="javascript:void(0);" class="show-more" onclick="toggleDescription(this)">Show More</a></p>
                     <p><strong>Category:</strong> {{ book.category }}</p>
                     <p><strong>Author:</strong> {{ book.author }}</p>
@@ -108,15 +107,12 @@
         }
 
         function toggleDescription(element) {
-            var shortDescr = element.previousElementSibling.previousElementSibling;
             var fullDescr = element.previousElementSibling;
             if (fullDescr.style.display === "none") {
                 fullDescr.style.display = "inline";
-                shortDescr.style.display = "none";
                 element.textContent = "Show Less";
             } else {
                 fullDescr.style.display = "none";
-                shortDescr.style.display = "inline";
                 element.textContent = "Show More";
             }
         }
