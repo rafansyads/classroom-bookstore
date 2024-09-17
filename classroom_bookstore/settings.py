@@ -129,3 +129,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "rafansya-daryltama-classroombookstor
 # Media files settings
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Static files settings
+STATIC_URL = '/static/'
+STATICFILES_DIR = os.path.join(BASE_DIR, 'main', 'static')
