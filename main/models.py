@@ -1,13 +1,19 @@
-import uuid
 import os
-from django.conf import settings
-from django.db import models
-from django.core.validators import MinValueValidator, MinLengthValidator, MaxLengthValidator, MaxValueValidator # can be changed to import * to import all validators if needed
 import re
+import uuid
+from django.db import models
+from django.conf import settings
+from django.core.validators import MinValueValidator, MinLengthValidator, MaxLengthValidator, MaxValueValidator # can be changed to import * to import all validators if needed
+from django.contrib.auth.models import User
+
+# Function to return a default user
+def get_default_user():
+    return User.objects.first()  # Replace with logic to get a default user
 
 # Create your models here.
 class BookEntry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     price = models.IntegerField()
     description = models.TextField()

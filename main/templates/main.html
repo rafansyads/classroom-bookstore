@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <h1>Classroom Bookstore</h1>
-        <h2>Rafansya Daryltama Santoso</h2>
+        <h2>{{ name }}</h2>
 
         <div class="categories-buttons">
             <button class="category-button" onclick="filterSelection('all')">Show All</button>
@@ -27,7 +27,7 @@
         <hr>
 
         <div class="context">
-            {% for book in context %}
+            {% for book in data_books %}
             <div class="book-cards" data="{{ book.category }}">
                 <div class="book-image">
                     <img src="{{ book.image.url }}" alt="{{ book.name }}">
@@ -78,6 +78,7 @@
             <a href="{% url 'main:logout' %}" id="logout-link">
                 <button id="logout-button">Logout</button>
             </a>
+            <p>Sesi terakhir login: {{ last_login }}</p>
         </div>
         <hr>
     </div>

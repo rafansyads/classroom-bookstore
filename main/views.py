@@ -6,14 +6,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 @login_required(login_url='main:login')
 def show_main(request):
-    context = [
+    data_books = [
         BookEntry(name='Classroom of the Elite Year 2, Volume 1', price=235000, description='Classroom of The Elite Year 2, Volume 1 is a light novel written by Syougo Kinugasa and illustrated by Shunsaku Tomose. This light novel is the sequel of Classroom of The Elite Year 1, Volume 1. The story continues with the main character, Kiyotaka Ayanokouji, and his friends in the second year of their high school life. The story is set in the Advanced Nurturing High School, where students are divided into four classes based on their academic performance. The story follows the students as they navigate the challenges of high school life and strive to achieve their goals. The light novel is filled with suspense, drama, and mystery, making it a must-read for fans of the genre.',
                   quantity=1, category='Light Novel / Manga', isbn_13='9781638581826', isbn_10='1638581827', published_date='2022-07-19', pages=480, language='English', weight=0.38, publisher='Airship', rating_star=0.0, rating_count=0, author='Syougo Kinugasa', time_added='2024-09-05 22:19:00', review_list={}, image=''),
         BookEntry(name='Classroom of the Elite Year 2, Volume 2', price=235000, description='Classroom of The Elite Year 2, Volume 2 is the continuation of the thrilling light novel series written by Syougo Kinugasa and illustrated by Shunsaku Tomose. In this volume, the story delves deeper into the complex dynamics of the Advanced Nurturing High School, where students are constantly tested both academically and socially. Kiyotaka Ayanokouji and his classmates face new challenges and adversaries as they navigate their second year. With unexpected twists and intense character development, this volume keeps readers on the edge of their seats. The intricate plot and suspenseful narrative make it a compelling read for fans of the series.',
@@ -31,20 +31,29 @@ def show_main(request):
         BookEntry(name='The 48 Laws of Power', price=230000, description='The 48 Laws of Power is a practical guide to understanding power dynamics and mastering the art of persuasion. Written by Robert Greene, the book explores the timeless principles of power and influence that have shaped history and continue to impact the world today. Drawing on historical examples and psychological insights, Greene offers a comprehensive framework for navigating the complexities of power in various contexts. Whether you are a leader, entrepreneur, or student of human nature, The 48 Laws of Power provides valuable lessons and strategies for achieving your goals and influencing others.',
                   quantity=1, category='Self-Help', isbn_13='9780140280197', isbn_10='0140280197', published_date='2000-09-01', pages=452, language='English', weight=0.45, publisher='Penguin Books', rating_star=0.0, rating_count=0, author='Robert Greene', time_added='2024-09-10 20:25:00', review_list={}, image=''),
     ]
-    
-    new_books = BookEntry.objects.all().order_by('-time_added')
-    context = list(new_books) + context
+    new_books = BookEntry.objects.all().order_by('-time_added').filter(user=request.user)
+    data_books = list(new_books) + data_books
 
-    for book in context:
+    for book in data_books:
         book.image = book.image_url()
 
-    return render(request, "main.html", {'context': context})
+    context = {
+        'name': request.user.username,
+        'class': 'PBP A Gasal 2024/2025',
+        'npm': '2306211231',
+        'data_books': data_books,
+        'last_login': request.COOKIES['last_login'],
+    }
+
+    return render(request, "main.html", context)
 
 def add_book_entry_form(request):
     form = BookEntryForm(request.POST or None, request.FILES or None)
 
     if form.is_valid() and request.method == 'POST':
-        form.save()
+        mood_entry = form.save(commit=False)
+        mood_entry.user = request.user
+        mood_entry.save()
         return redirect('main:show_main')
 
     context = {'form': form}
@@ -100,4 +109,6 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('main:login')
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
