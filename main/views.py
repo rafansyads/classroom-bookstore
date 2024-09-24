@@ -1,10 +1,17 @@
-from django.shortcuts import render, redirect
+import datetime
 from main.models import BookEntry
 from main.forms import BookEntryForm
-from django.http import HttpResponse
+from django.urls import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='main:login')
 def show_main(request):
     context = [
         BookEntry(name='Classroom of the Elite Year 2, Volume 1', price=235000, description='Classroom of The Elite Year 2, Volume 1 is a light novel written by Syougo Kinugasa and illustrated by Shunsaku Tomose. This light novel is the sequel of Classroom of The Elite Year 1, Volume 1. The story continues with the main character, Kiyotaka Ayanokouji, and his friends in the second year of their high school life. The story is set in the Advanced Nurturing High School, where students are divided into four classes based on their academic performance. The story follows the students as they navigate the challenges of high school life and strive to achieve their goals. The light novel is filled with suspense, drama, and mystery, making it a must-read for fans of the genre.',
@@ -62,3 +69,35 @@ def show_json_by_id(request, id):
     book = BookEntry.objects.filter(pk=id)
     data = serializers.serialize('json', book)
     return HttpResponse(data, content_type='application/json')
+
+def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+
+def login_user(request):
+   if request.method == 'POST':
+      form = AuthenticationForm(data=request.POST)
+
+      if form.is_valid():
+        user = form.get_user()
+        login(request, user)
+        response = HttpResponseRedirect(reverse("main:show_main"))
+        response.set_cookie('last_login', str(datetime.datetime.now()))
+        return response
+
+   else:
+        form = AuthenticationForm(request)
+   context = {'form': form}
+   return render(request, 'login.html', context)
+
+def logout_user(request):
+    logout(request)
+    return redirect('main:login')
