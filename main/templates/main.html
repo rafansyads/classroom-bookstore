@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classroom Bookstore</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <div class="container">
@@ -42,7 +42,7 @@
                     <p><strong>Published Date:</strong> {{ book.published_date }}</p>
                     <p><strong>ISBN (13 digit):</strong> {{ book.isbn_13 }}</p>
                     <p><strong>Availability Stock: {{ book.quantity }}</strong></p>
-                    <p><strong><img class="rating-star" src="{% static 'main/properties/rating-star.jpg' %}" alt="Rating Star">Rating:</strong> {{ book.rating_star }} / 5.0</p>
+                    <p><strong><img class="rating-star" src="{% static 'image/properties/rating-star.jpg' %}" alt="Rating Star">Rating:</strong> {{ book.rating_star }} / 5.0</p>
 
                     <!-- Additional Attributes -->
                     <span class="more-attributes" style="display: none;">

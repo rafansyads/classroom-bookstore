@@ -49,18 +49,19 @@ class BookEntry(models.Model):
             return 0.0
         return sum(self.review_list.values()) / len(self.review_list)
     
+    # When deployed, app should not display the initial images because the images are gitignored
     def image_url(self):
         # Replace spaces with underscores and add the file extension
         image_name = re.sub(r'\W+', '_', self.name).lower()
         extentions = ['jpg', 'jpeg', 'png']
-        media_dir = os.path.join(settings.MEDIA_ROOT, 'books')
+        media_dir = os.path.join(settings.MEDIA_ROOT, 'image/books')
 
         # Check if the image exists with any of the extensions (jpg, jpeg, png)
         for ext in extentions:
             if os.path.exists(os.path.join(media_dir, image_name + '.' + ext)):
-                return f'/books/{image_name}.{ext}'
+                return f'image/books/{image_name}.{ext}'
             
-        return '/books/default.jpg'
+        return 'image/books/default.jpg'
     
     def is_in_stock(self):
         return self.quantity > 0
