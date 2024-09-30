@@ -1,0 +1,118 @@
+.context {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    gap: 20px;
+    padding: 15px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1920px;
+}
+
+@media (min-width: 640px) {
+    .context {
+        grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); /* Adjust for larger screens */
+    }
+}
+
+a.show-more {
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.book-image {
+    max-width: 300px;
+    height: auto;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+img.rating-star {
+    width: 1.5em;
+    height: auto;
+}
+
+.book-info {
+    flex-grow: 1; /* Allow the book info to grow and take available space */
+    width: 100%;
+}
+
+button.category-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 2px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 3px 1px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button.buy-button {
+    background-color: green;
+}
+
+button.remind-button {
+    background-color: orange;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+#edit-book-button,
+#delete-book-button,
+#admin-add-book-button,
+button.buy-button {
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#edit-book-button {
+    background-color: #4CAF50;
+}
+
+a.edit-book-link:hover,
+#admin-add-book-button:hover,
+button.category-button:hover,
+button#edit-book-button:hover {
+    background-color: #1b6b1f;
+}
+
+#delete-book-button {
+    background-color: #f44336;
+}
+
+#delete-book-button:hover {
+    background-color: #d32f2f;
+}
+
+button.buy-button:hover {
+    background-color: darkgreen;
+}
+
+button.remind-button:hover {
+    background-color: darkorange;
+}
+
+a#admin-add-book-link {
+    text-decoration: none;
+}
+
+#admin-add-book-button {
+    background-color: #4CAF50;
+}

@@ -1,0 +1,48 @@
+{% load static %}
+
+<div class="book-cards bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center justify-start {{ book.category|slugify }}">
+    <div class="book-image max-w-xs h-auto rounded-lg flex justify-center items-center">
+        <img src="{{ book.image.url }}" alt="{{ book.name }}">
+    </div>
+    <h2 class="font-bold text-lg mt-4">{{ book.name }}</h2>
+    <div class="book-info w-full text-justify mt-2">
+        <p id="price-tag" class="font-bold"><strong>Price:</strong> Rp{{ book.price }},-</p>
+        <p class="short-descr">{{ book.description|slice:":150" }}<span class="full-descr hidden">{{ book.description|slice:"150:" }}</span>
+        <a href="javascript:void(0);" class="show-more text-blue-500" onclick="toggleDescription(this)">Show More</a></p>
+        <p><strong>Category:</strong> {{ book.category }}</p>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Published Date:</strong> {{ book.published_date }}</p>
+        <p><strong>ISBN (13 digit):</strong> {{ book.isbn_13 }}</p>
+        <p><strong>Availability Stock: {{ book.quantity }}</strong></p>
+        <p><strong><img class="rating-star inline-block" src="{% static 'image/properties/rating-star.jpg' %}" alt="Rating Star">Rating:</strong> {{ book.rating_star }} / 5.0</p>
+
+        <!-- Additional Attributes -->
+        <span class="more-attributes hidden">
+            <p><strong>ISBN (10 digit):</strong> {{ book.isbn_10 }}</p>
+            <p><strong>Publisher:</strong> {{ book.publisher }}</p>
+            <p><strong>Pages:</strong> {{ book.pages }}</p>
+            <p><strong>Language:</strong> {{ book.language }}</p>
+            <p><strong>Weight:</strong> {{ book.weight }} grams</p>
+        </span>
+        <a href="javascript:void(0);" class="show-more" onclick="toggleAttributes(this)">Show More</a>
+        <br><br>
+
+        <!-- Conditional Button -->
+        {% if book.is_in_stock %}
+            <button class="buy-button">Buy Now</button>
+        {% else %}
+            <button class="remind-button">Remind Me</button>
+        {% endif %}
+
+        <!-- Options: Edit and delete book entry: -->
+        <div class="book-options">
+            <a href="{% url 'main:edit_book' book.pk %}"  id="edit-book-link">
+                <button id="edit-book-button">Edit Book Entry</button>
+            </a>
+            <a href="{% url 'main:delete_book' book.pk %}" id="delete-book-link">
+                <button id="delete-book-button">Delete Book Entry</button>
+            </a>
+        </div>
+        <hr>
+    </div>
+</div>

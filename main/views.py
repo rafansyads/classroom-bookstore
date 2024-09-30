@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required(login_url='main:login')
 def show_main(request):
-    data_books = [
+    data_books = [ # Dummy products that can't be edited or deleted
         BookEntry(name='Classroom of the Elite Year 2, Volume 1', price=235000, description='Classroom of The Elite Year 2, Volume 1 is a light novel written by Syougo Kinugasa and illustrated by Shunsaku Tomose. This light novel is the sequel of Classroom of The Elite Year 1, Volume 1. The story continues with the main character, Kiyotaka Ayanokouji, and his friends in the second year of their high school life. The story is set in the Advanced Nurturing High School, where students are divided into four classes based on their academic performance. The story follows the students as they navigate the challenges of high school life and strive to achieve their goals. The light novel is filled with suspense, drama, and mystery, making it a must-read for fans of the genre.',
                   quantity=1, category='Light Novel / Manga', isbn_13='9781638581826', isbn_10='1638581827', published_date='2022-07-19', pages=480, language='English', weight=0.38, publisher='Airship', rating_star=0.0, rating_count=0, author='Syougo Kinugasa', time_added='2024-09-05 22:19:00', review_list={}, image=''),
         BookEntry(name='Classroom of the Elite Year 2, Volume 2', price=235000, description='Classroom of The Elite Year 2, Volume 2 is the continuation of the thrilling light novel series written by Syougo Kinugasa and illustrated by Shunsaku Tomose. In this volume, the story delves deeper into the complex dynamics of the Advanced Nurturing High School, where students are constantly tested both academically and socially. Kiyotaka Ayanokouji and his classmates face new challenges and adversaries as they navigate their second year. With unexpected twists and intense character development, this volume keeps readers on the edge of their seats. The intricate plot and suspenseful narrative make it a compelling read for fans of the series.',
@@ -33,6 +33,7 @@ def show_main(request):
     ]
     new_books = BookEntry.objects.all().order_by('-time_added').filter(user=request.user)
     data_books = list(new_books) + data_books
+    categories = set([book.category for book in data_books])
 
     for book in data_books:
         book.image = book.image_url()
@@ -42,7 +43,8 @@ def show_main(request):
         'class': 'PBP A Gasal 2024/2025',
         'npm': '2306211231',
         'data_books': data_books,
-        'last_login': request.COOKIES['last_login'],
+        'categories' : categories,
+        'last_login': request.COOKIES.get('last_login'),
     }
 
     return render(request, "main.html", context)
@@ -112,3 +114,29 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_book(request, id):
+    # Get the book entry by id
+    book = BookEntry.objects.get(pk=id)
+
+    # Create a form instance and populate it with data from the request
+    form = BookEntryForm(request.POST or None, request.FILES or None, instance=book)
+
+    # Check if the form is valid
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    
+    # Render the edit book template with the form
+    context = {'form': form}
+    return render(request, 'edit_book.html', context)
+
+def delete_book(request, id):
+    # Get the book entry by id
+    book = BookEntry.objects.get(pk=id)
+
+    # Delete the book entry
+    book.delete()
+
+    # Redirect to the main page
+    return HttpResponseRedirect(reverse('main:show_main'))
