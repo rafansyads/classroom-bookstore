@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required(login_url='main:login')
 def show_main(request):
+    # data_books = []
     data_books = [ # Dummy products that can't be edited or deleted
         BookEntry(name='Classroom of the Elite Year 2, Volume 1', price=235000, description='Classroom of The Elite Year 2, Volume 1 is a light novel written by Syougo Kinugasa and illustrated by Shunsaku Tomose. This light novel is the sequel of Classroom of The Elite Year 1, Volume 1. The story continues with the main character, Kiyotaka Ayanokouji, and his friends in the second year of their high school life. The story is set in the Advanced Nurturing High School, where students are divided into four classes based on their academic performance. The story follows the students as they navigate the challenges of high school life and strive to achieve their goals. The light novel is filled with suspense, drama, and mystery, making it a must-read for fans of the genre.',
                   quantity=1, category='Light Novel / Manga', isbn_13='9781638581826', isbn_10='1638581827', published_date='2022-07-19', pages=480, language='English', weight=0.38, publisher='Airship', rating_star=0.0, rating_count=0, author='Syougo Kinugasa', time_added='2024-09-05 22:19:00', review_list={}, image=''),

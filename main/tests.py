@@ -66,3 +66,7 @@ class mainTest(TestCase):
         })
 
         self.assertEqual(response.status_code, 302)
+
+    def test_add_css_static(self):
+        response = Client().get('/static/css/global.css')
+        self.assertEqual(response.status_code, 200)

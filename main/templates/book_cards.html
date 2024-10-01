@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="book-cards bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center justify-start {{ book.category|slugify }}">
+<div class="book-cards border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center justify-start animate-shine bg-light-indigo {{ book.category|slugify }}">
     <div class="book-image max-w-xs h-auto rounded-lg flex justify-center items-center">
         <img src="{{ book.image.url }}" alt="{{ book.name }}">
     </div>
@@ -30,19 +30,25 @@
         <!-- Conditional Button -->
         {% if book.is_in_stock %}
             <button class="buy-button">Buy Now</button>
+            <button class="add-to-cart-button">
+                Add to Cart
+                <svg class="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.4 5h11.2L17 13M5.4 5H19M5.4 5L4 3M17 13l1.4 5M9 21h6"></path>
+                </svg>
+            </button>
         {% else %}
             <button class="remind-button">Remind Me</button>
         {% endif %}
 
         <!-- Options: Edit and delete book entry: -->
         <div class="book-options">
-            <a href="{% url 'main:edit_book' book.pk %}"  id="edit-book-link">
+            <a href="{% url 'main:edit_book' book.pk %}" id="edit-book-link">
                 <button id="edit-book-button">Edit Book Entry</button>
             </a>
             <a href="{% url 'main:delete_book' book.pk %}" id="delete-book-link">
                 <button id="delete-book-button">Delete Book Entry</button>
             </a>
         </div>
-        <hr>
+    <hr>
     </div>
 </div>
