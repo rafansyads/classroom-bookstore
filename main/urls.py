@@ -18,7 +18,3 @@ urlpatterns = [
     path('edit/<uuid:id>', edit_book, name='edit_book'),
     path('delete/<uuid:id>', delete_book, name='delete_book'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

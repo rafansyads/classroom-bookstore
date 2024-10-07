@@ -138,10 +138,6 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "rafansya-daryltama-classroombookstor
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Static files settings
-STATIC_URL = '/static/'
-STATICFILES_DIR = os.path.join(BASE_DIR, 'main', 'static')
-
 # Custom settings
 # Automation push origin and PWS
 CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://rafansya-daryltama-classroombookstore.pbp.cs.ui.ac.id/", "https://rafansya-daryltama-classroombookstore.pbp.cs.ui.ac.id/https://<URL_PWS_KAMU>"]

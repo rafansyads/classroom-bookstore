@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap');
+
 .context {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
@@ -22,6 +24,35 @@
     background-color: #b3cde0;
 }
 
+.text-indigo {
+    color: indigo;
+}
+
+:where(.text-greencs-light) {
+    color: #25c2a0;
+}
+
+:where(.plus-jakarta-sans) {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 100;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+body {
+    padding-top: 60px; /* Adjust this value based on the height of your navbar */
+}
+
+hr.black-hr {
+    border: none;
+    border-top: 1px solid gray;
+}
+
 .form-style form input, form textarea, form select {
     width: 100%;
     padding: 0.5rem;
@@ -35,15 +66,15 @@
     box-shadow: 0 0 0 3px #674ea7;
 }
 
-@keyframes shine {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
-
 .animate-shine {
     background: linear-gradient(120deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.3));
     background-size: 200% 100%;
     animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
 }
 
 a.show-more {

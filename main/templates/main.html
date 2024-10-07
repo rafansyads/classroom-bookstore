@@ -10,7 +10,7 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/global.css' %}">
     </head>
-    <body class="flex flex-col min-h-screen">
+    <body class="bg-cyan-50 flex flex-col min-h-screen">
         <div class="container mx-auto p-4">
             {% if not data_books %}
             <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
@@ -18,7 +18,7 @@
                 <p class="text-center text-gray-600 mt-4">No books available at the moment.</p>
             </div>
             {% else %}
-                <div class="context grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 animate-shine bg-light-indigo">
+                <div class="context grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center items-center">
                     {% for book in data_books %}
                         {% include 'book_cards.html' %}
                     {% endfor %}
@@ -31,50 +31,7 @@
             </div>
             <hr class="my-4">
         </div>
-        
-        <script>
-            function toggleAttributes(anchor) {
-                var moreAttributes = anchor.previousElementSibling;
-                if (moreAttributes.style.display === "none") {
-                    moreAttributes.style.display = "block";
-                    anchor.textContent = "Show Less";
-                } else {
-                    moreAttributes.style.display = "none";
-                    anchor.textContent = "Show More";
-                }
-            }
-        
-        function filterSelection(category) {
-            var books = document.getElementsByClassName("book-cards");
-            if (category === "all") {
-                for (var i = 0; i < books.length; i++) {
-                    books[i].style.display = "block";
-                }
-            } else {
-                for (var i = 0; i < books.length; i++) {
-                    if (books[i].getElementsByClassName("book-info")[0].getElementsByTagName("p")[2].textContent.split(": ")[1] === category) {
-                        books[i].style.display = "block";
-                    } else {
-                        books[i].style.display = "none";
-                    }
-                }
-            }
-        }
-        
-        function toggleDescription(element) {
-            var fullDescr = element.previousElementSibling;
-            if (fullDescr.style.display === "none") {
-                fullDescr.style.display = "inline";
-                element.textContent = "Show Less";
-            } else {
-                fullDescr.style.display = "none";
-                element.textContent = "Show More";
-            }
-        }
-        </script>
-
-
-</body>                    
+    </body>             
 </html>
 {% include 'footer.html' %}
 {% endblock content %}

@@ -1,11 +1,11 @@
 {% load static %}
 
-<div class="book-cards border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center justify-start animate-shine bg-light-indigo {{ book.category|slugify }}">
+<div class="book-cards border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center justify-start bg-light-indigo {{ book.category|slugify }}">
     <div class="book-image max-w-xs h-auto rounded-lg flex justify-center items-center">
         <img src="{{ book.image.url }}" alt="{{ book.name }}">
     </div>
-    <h2 class="font-bold text-lg mt-4">{{ book.name }}</h2>
-    <div class="book-info w-full text-justify mt-2">
+    <h2 class="font-bold text-lg text-greencs-light mt-4 plus-jakarta-sans" id="book-title">{{ book.name }}</h2>
+    <div class="book-info w-full text-justify text-gray-600 mt-2">
         <p id="price-tag" class="font-bold"><strong>Price:</strong> Rp{{ book.price }},-</p>
         <p class="short-descr">{{ book.description|slice:":150" }}<span class="full-descr hidden">{{ book.description|slice:"150:" }}</span>
         <a href="javascript:void(0);" class="show-more text-blue-500" onclick="toggleDescription(this)">Show More</a></p>
@@ -14,7 +14,7 @@
         <p><strong>Published Date:</strong> {{ book.published_date }}</p>
         <p><strong>ISBN (13 digit):</strong> {{ book.isbn_13 }}</p>
         <p><strong>Availability Stock: {{ book.quantity }}</strong></p>
-        <p><strong><img class="rating-star inline-block" src="{% static 'image/properties/rating-star.jpg' %}" alt="Rating Star">Rating:</strong> {{ book.rating_star }} / 5.0</p>
+        <p><strong><img class="rating-star inline-block" src="{% static 'image/properties/rating-star.png' %}" alt="Rating Star">Rating:</strong> {{ book.rating_star }} / 5.0</p>
 
         <!-- Additional Attributes -->
         <span class="more-attributes hidden">
@@ -49,6 +49,6 @@
                 <button id="delete-book-button">Delete Book Entry</button>
             </a>
         </div>
-    <hr>
+    <hr class="gray-hr animate-shine">
     </div>
 </div>
