@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
-from main.models import BookEntry # import the BookEntry model from models.py
+from main.models import BookEntry # import the BookEntry model from models.py\
+from django.utils.html import strip_tags
 
 class BookEntryForm(ModelForm):
     class Meta:
@@ -19,6 +20,7 @@ class BookEntryForm(ModelForm):
         } # customised details: published_date, review_list, image -> widgets 
 
         labels = { # dictionary of labels to customize the field labels
+            'name': 'Book Title',
             'isbn_13': 'ISBN-13',
             'isbn_10': 'ISBN-10',
             'rating_star': 'Rating (0.0 - 5.0)',
@@ -46,4 +48,34 @@ class BookEntryForm(ModelForm):
             raise forms.ValidationError('Review list must be a valid JSON object.')
         return review_list
 
-        # NOTE: The above custom validation methods are commented out as they are not used in this example
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        return strip_tags(name)
+    
+    def clean_description(self):
+        description = self.cleaned_data.get('description')
+        return strip_tags(description)
+    
+    def clean_author(self):
+        author = self.cleaned_data.get('author')
+        return strip_tags(author)
+    
+    def clean_publisher(self):
+        publisher = self.cleaned_data.get('publisher')
+        return strip_tags(publisher)
+    
+    def clean_language(self):
+        language = self.cleaned_data.get('language')
+        return strip_tags(language)
+    
+    def clean_category(self):
+        category = self.cleaned_data.get('category')
+        return strip_tags(category)
+    
+    def clean_isbn_13(self):
+        isbn_13 = self.cleaned_data.get('isbn_13')
+        return strip_tags(isbn_13)
+    
+    def clean_isbn_10(self):
+        isbn_10 = self.cleaned_data.get('isbn_10')
+        return strip_tags(isbn_10)

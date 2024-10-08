@@ -130,7 +130,7 @@ button.remind-button {
 
 #edit-book-button,
 #delete-book-button,
-#admin-add-book-button,
+/* #admin-add-book-button, */
 button.buy-button {
     border: none;
     color: white;
@@ -150,7 +150,7 @@ button.buy-button {
 }
 
 a.edit-book-link:hover,
-#admin-add-book-button:hover,
+/* #admin-add-book-button:hover, */
 button.category-button:hover,
 button#edit-book-button:hover {
     background-color: #1b6b1f;
@@ -176,6 +176,6 @@ a#admin-add-book-link {
     text-decoration: none;
 }
 
-#admin-add-book-button {
+/* #admin-add-book-button {
     background-color: #4CAF50;
-}
+} */

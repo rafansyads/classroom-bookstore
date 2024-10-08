@@ -1,4 +1,5 @@
 {% load static %}
+{% for book in books %}
 
 <div class="book-cards border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center justify-start bg-light-indigo {{ book.category|slugify }}">
     <div class="book-image max-w-xs h-auto rounded-lg flex justify-center items-center">
@@ -52,3 +53,5 @@
     <hr class="gray-hr animate-shine">
     </div>
 </div>
+
+{% endfor %}
