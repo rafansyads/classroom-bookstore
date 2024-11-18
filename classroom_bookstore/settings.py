@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main'
+    'main',
+    'authentication',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'classroom_bookstore.urls'
@@ -132,7 +135,7 @@ else:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "rafansya-daryltama-classroombookstore.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "10.0.2.2", "rafansya-daryltama-classroombookstore.pbp.cs.ui.ac.id"]
 
 # Media files settings
 MEDIA_URL = '/media/'
@@ -140,4 +143,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Custom settings
 # Automation push origin and PWS
-CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://rafansya-daryltama-classroombookstore.pbp.cs.ui.ac.id/", "https://rafansya-daryltama-classroombookstore.pbp.cs.ui.ac.id/https://<URL_PWS_KAMU>"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://rafansya-daryltama-classroombookstore.pbp.cs.ui.ac.id/", "https://rafansya-daryltama-classroombookstore.pbp.cs.ui.ac.id/"]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'

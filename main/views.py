@@ -1,8 +1,8 @@
-import datetime
+import datetime, json
 from main.models import BookEntry
 from main.forms import BookEntryForm
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core import serializers
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -199,3 +199,32 @@ def delete_book(request, id):
 
     # Redirect to the main page
     return HttpResponseRedirect(reverse('main:show_main'))
+
+@csrf_exempt
+def create_book_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_book = BookEntry.objects.create(
+            user=request.user,
+            name=data['name'],
+            price=data['price'],
+            description=data['description'],
+            quantity=data['quantity'],
+            category=data['category'],
+            isbn_13=data['isbn_13'],
+            isbn_10=data['isbn_10'],
+            published_date=data['published_date'],
+            pages=data['pages'],
+            language=data['language'],
+            weight=data['weight'],
+            author=data['author'],
+            publisher=data['publisher'],
+            image=data.get('image', None)
+        )
+
+        new_book.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
