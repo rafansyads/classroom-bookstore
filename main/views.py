@@ -205,6 +205,8 @@ def create_book_flutter(request):
     if request.method == 'POST':
 
         data = json.loads(request.body)
+        published_date = data['published_date'].split('T')[0] if 'T' in data['published_date'] else data['published_date']
+        
         new_book = BookEntry.objects.create(
             user=request.user,
             name=data['name'],
@@ -214,7 +216,7 @@ def create_book_flutter(request):
             category=data['category'],
             isbn_13=data['isbn_13'],
             isbn_10=data['isbn_10'],
-            published_date=data['published_date'],
+            published_date=published_date,
             pages=data['pages'],
             language=data['language'],
             weight=data['weight'],

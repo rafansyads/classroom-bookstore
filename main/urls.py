@@ -21,4 +21,5 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('edit/<uuid:id>', edit_book, name='edit_book'),
     path('delete/<uuid:id>', delete_book, name='delete_book'),
+    path('create-flutter/', create_book_flutter, name='create_book_flutter'),
 ]
